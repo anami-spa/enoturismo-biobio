@@ -1,0 +1,111 @@
+/* Fuentes locales — sustituta libre de Compasse / Intro (pendiente licencia web de la diseñadora) */
+@import "@fontsource/barlow/300.css";
+@import "@fontsource/barlow/400.css";
+@import "@fontsource/barlow/500.css";
+@import "@fontsource/barlow/600.css";
+@import "@fontsource/barlow/700.css";
+
+@import "tailwindcss";
+
+/* ============================================================
+   TEMA — Manual de marca Enoturismo Biobío (oct-2026)
+   ============================================================ */
+@theme {
+  /* Primarios */
+  --color-parra: #022800;
+  --color-turquesa: #0eaaaa;
+  --color-burdeos: #510342;
+  --color-cafe: #4c2902;
+
+  /* Secundarios */
+  --color-petroleo: #397c8c;
+  --color-ciruela-oscuro: #33012c;   /* footer, tarjetas */
+  --color-tierra: #331c05;
+  --color-naranja: #ef7d00;
+  --color-ciruela: #602455;          /* fondo sección "Explora" */
+
+  /* Acentos */
+  --color-amarillo: #dddb00;
+  --color-vino: #7c0f29;
+  --color-noche: #240249;            /* botón mapa */
+
+  /* Tipografía */
+  --font-sans: "Barlow", system-ui, -apple-system, sans-serif;
+  --font-display: "Barlow", system-ui, -apple-system, sans-serif;
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  font-family: var(--font-sans);
+  color: #ffffff;
+  background-color: var(--color-ciruela-oscuro);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background-color: var(--color-amarillo);
+  color: var(--color-noche);
+}
+
+/* Skip link — WCAG 2.4.1 */
+.skip-link {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  padding: 0.5rem 1rem;
+  background: #ffffff;
+  color: var(--color-noche);
+  font-weight: 600;
+  border-radius: 0.5rem;
+  z-index: 9999;
+  transform: translateY(-200%);
+  transition: transform 0.2s ease;
+  text-decoration: none;
+}
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* Foco visible — contraste ≥ 3:1 sobre fondos oscuros y fotos */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+:focus-visible {
+  outline: 3px solid var(--color-amarillo);
+  outline-offset: 3px;
+}
+
+/* Carrusel: sin barra de scroll visible, el scroll sigue disponible por teclado y táctil */
+.carrusel {
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+}
+.carrusel::-webkit-scrollbar {
+  display: none;
+}
+.carrusel > * {
+  scroll-snap-align: start;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

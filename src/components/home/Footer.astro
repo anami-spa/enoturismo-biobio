@@ -1,0 +1,33 @@
+---
+import { Image } from 'astro:assets'
+import logo from '../../assets/logo/logo-blanco.webp'
+import instagram from '../../assets/iconos/instagram.webp'
+import hojas from '../../assets/deco/hojas-footer.webp'
+import { url } from '../../utils/url'
+
+const enlaces = [
+  { texto: 'Explorar', href: '#explorar' },
+  { texto: 'Rutas y Experiencias', href: '#rutas' },
+  { texto: 'Sobre el proyecto', href: '#sobre' },
+  { texto: 'Contacto', href: '#contacto' },
+]
+---
+
+<footer class="relative isolate overflow-hidden bg-ciruela-oscuro">
+  <Image src={hojas} alt="" aria-hidden="true" width={520} class="pointer-events-none absolute bottom-0 right-0 -z-10 h-auto w-[70vw] max-w-[480px] md:w-[32vw]" loading="lazy" />
+  <div class="mx-auto flex max-w-[1440px] flex-col items-start gap-8 px-5 py-14 lg:flex-row lg:items-center lg:gap-10 md:px-10 lg:px-14">
+    <a href={url()} aria-label="Enoturismo Biobío — Herencia viva, ir al inicio" class="shrink-0">
+      <Image src={logo} alt="" width={96} class="h-auto w-[84px] md:w-[96px]" loading="lazy" />
+    </a>
+    <a href="#" aria-label="Instagram de Enoturismo Biobío" class="grid h-12 w-12 shrink-0 place-items-center rounded-lg hover:bg-white/15">
+      <Image src={instagram} alt="" aria-hidden="true" width={44} class="h-auto w-11" loading="lazy" />
+    </a>
+    <nav aria-label="Pie de página">
+      <ul class="flex flex-wrap gap-x-10 gap-y-1 text-lg font-light text-white md:text-xl lg:text-[1.4rem]">
+        {enlaces.map((e) => (
+          <li><a href={e.href} class="inline-flex min-h-11 items-center underline-offset-8 hover:underline">{e.texto}</a></li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</footer>

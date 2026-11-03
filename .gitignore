@@ -1,0 +1,33 @@
+# Entorno — NUNCA commitear credenciales reales
+.env
+.env.local
+.env.production
+
+# Astro build output
+dist/
+.astro/
+
+# Node
+node_modules/
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Lighthouse
+.lighthouseci/
+
+# Logs
+logs/
+*.log
+
+# Instrucciones internas para agentes (traen datos del contrato): solo locales
+CLAUDE.md
+AGENTS.md

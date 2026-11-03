@@ -1,0 +1,68 @@
+---
+import { Image } from 'astro:assets'
+import foto from '../../assets/fotos/hero.webp'
+import hojas from '../../assets/deco/hojas-hero.webp'
+import datos from '../../data/iniciativas.json'
+import { url } from '../../utils/url'
+
+const iconos = import.meta.glob<{ default: ImageMetadata }>('../../assets/iconos/*.webp', { eager: true })
+const icono = (nombre: string) => iconos[`../../assets/iconos/${nombre}.webp`].default
+---
+
+<section class="relative isolate overflow-hidden bg-parra" aria-labelledby="titulo-hero">
+  <Image
+    src={foto}
+    alt="Viñedo del Biobío al atardecer, visto entre hojas de parra"
+    widths={[640, 960, 1440, 2000]}
+    sizes="100vw"
+    loading="eager"
+    fetchpriority="high"
+    class="absolute inset-0 -z-20 h-full w-full object-cover object-[42%_top] min-[1440px]:inset-auto min-[1440px]:left-0 min-[1440px]:top-0 min-[1440px]:h-auto min-[1440px]:origin-[88.5%_147.8%] min-[1440px]:scale-125"
+  />
+  <div class="absolute inset-0 -z-10 bg-gradient-to-b from-black/30 via-black/25 to-black/50 lg:from-black/10 lg:via-black/10 lg:to-black/25" aria-hidden="true"></div>
+  <Image src={hojas} alt="" aria-hidden="true" width={520} loading="eager" class="pointer-events-none absolute left-0 top-0 -z-[5] h-auto w-[44vw] max-w-[520px] md:w-[36vw]" />
+
+  <div class="relative mx-auto flex min-h-[860px] max-w-[1440px] flex-col px-5 pb-28 pt-44 md:min-h-[935px] md:px-10 md:pt-48 lg:pl-14 lg:pr-24">
+    <div class="ml-auto w-full max-w-[640px] text-center md:text-right [text-shadow:0_1px_8px_rgb(0_0_0/0.55)]">
+      <p class="text-sm font-semibold uppercase tracking-[0.28em] text-white md:text-[1.4rem]">Descubre el enoturismo del Biobío</p>
+      <h1 id="titulo-hero" class="mt-4 text-[2.9rem] font-bold leading-[0.98] text-white md:mt-5 md:text-[4.4rem] lg:text-[5rem]">
+        Un territorio con herencia viva
+      </h1>
+      <p class="mt-5 text-base font-light text-white md:text-[1.3rem] md:leading-snug">
+        Vinos, paisajes, personas y experiencias<br class="hidden md:block" /> para descubrir el Sur de Chile.
+      </p>
+
+      <form action={url('/explorar/')} method="get" role="search" class="relative mt-8 md:ml-auto md:max-w-[500px]">
+        <label for="buscar" class="sr-only">¿Qué experiencia quieres descubrir?</label>
+        <input
+          id="buscar"
+          name="q"
+          type="search"
+          placeholder="¿Qué experiencia quieres descubrir?"
+          class="h-14 w-full rounded-full bg-white/90 px-6 pr-14 text-base text-ciruela-oscuro md:text-[1.1rem] placeholder:text-ciruela-oscuro/80"
+        />
+        <button type="submit" aria-label="Buscar" class="absolute right-1.5 top-1.5 grid h-11 w-11 place-items-center rounded-full text-burdeos hover:bg-burdeos/10">
+          <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        </button>
+      </form>
+    </div>
+
+    <nav aria-label="Categorías de experiencias" class="mt-16 md:mx-auto md:mt-14 md:w-full md:max-w-[640px] lg:mt-[80px] lg:max-w-[1356px]">
+      <ul class="grid grid-cols-3 gap-x-4 gap-y-8 lg:grid-cols-6">
+        {datos.categorias.map((c) => {
+          const img = icono(c.icono)
+          return (
+            <li>
+              <a href={url(`/explorar/?categoria=${c.slug}`)} class="group flex min-h-11 flex-col items-center gap-3 rounded-xl px-1 py-2 text-white">
+                <span class="text-center text-base font-normal md:text-[1.45rem] md:font-light">{c.nombre}</span>
+                <span class="grid h-[84px] w-[84px] place-items-center transition-transform group-hover:scale-110">
+                  <Image src={img} alt="" aria-hidden="true" width={84} height={84} class="max-h-[84px] w-auto max-w-[84px] object-contain" densities={[1, 2]} />
+                </span>
+              </a>
+            </li>
+          )
+        })}
+      </ul>
+    </nav>
+  </div>
+</section>

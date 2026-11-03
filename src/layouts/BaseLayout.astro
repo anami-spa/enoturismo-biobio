@@ -1,0 +1,31 @@
+---
+import SEO from '../components/SEO.astro'
+import '../styles/global.css'
+
+export interface Props {
+  title: string
+  description: string
+  ogImage?: string
+}
+
+const { title, description, ogImage } = Astro.props
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <SEO
+      title={title}
+      description={description}
+      canonicalURL={new URL(Astro.url.pathname, Astro.site)}
+      ogImage={ogImage}
+    />
+    <!-- Prototipo interno: no indexar hasta que el proyecto pase a producción -->
+    <meta name="robots" content="noindex, nofollow" />
+  </head>
+
+  <body>
+    <a href="#contenido-principal" class="skip-link">Saltar al contenido principal</a>
+    <slot />
+  </body>
+</html>

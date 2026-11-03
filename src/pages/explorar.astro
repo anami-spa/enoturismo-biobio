@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import { url } from '../utils/url'
+---
+
+<BaseLayout title="Explorar — Enoturismo Biobío" description="Mapa y filtros de las iniciativas de enoturismo del Biobío. Sección en construcción.">
+  <main id="contenido-principal" class="grid min-h-screen place-items-center bg-ciruela px-6 text-center">
+    <div>
+      <p class="text-sm uppercase tracking-[0.28em]">Enoturismo Biobío</p>
+      <h1 class="mt-4 text-4xl font-bold md:text-6xl">Estamos preparando el mapa</h1>
+      <p class="mx-auto mt-5 max-w-[48ch] text-lg font-light">Pronto vas a poder explorar viñas, gastronomía, alojamiento y experiencias en un solo lugar.</p>
+      <a href={url()} class="mt-8 inline-flex min-h-14 items-center rounded-xl bg-noche px-9 py-4 text-xl tracking-wide hover:bg-noche/85">Volver al inicio</a>
+    </div>
+  </main>
+</BaseLayout>

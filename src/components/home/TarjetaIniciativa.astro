@@ -1,0 +1,25 @@
+---
+import { Image } from 'astro:assets'
+
+export interface Props {
+  nombre: string
+  comuna: string
+  categoria: string
+  imagen: ImageMetadata
+  href?: string
+}
+
+const { nombre, comuna, categoria, imagen, href = '#' } = Astro.props
+---
+
+<li class="w-[78vw] max-w-[360px] shrink-0 sm:w-[340px] lg:w-[360px]">
+  <a href={href} class="flex h-full flex-col items-center rounded-[1.6rem] bg-ciruela-oscuro p-6 lg:px-9 lg:pb-6 lg:pt-9 text-center text-white transition-transform hover:-translate-y-1">
+    <Image src={imagen} alt="" width={320} height={220} class="aspect-[3/2] w-full rounded-xl object-cover" loading="lazy" densities={[1, 2]} />
+    <h3 class="mt-5 text-xl font-bold italic tracking-[0.08em] lg:text-[1.35rem]">{nombre}</h3>
+    <p class="mt-1.5 flex items-center gap-1.5 text-base tracking-wide lg:text-[1.2rem]">
+      <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+      {comuna}
+    </p>
+    <span class="mt-3 rounded-full bg-ciruela px-3.5 py-0.5 text-base tracking-wide lg:text-[1.1rem]">{categoria}</span>
+  </a>
+</li>

@@ -1,0 +1,20 @@
+{
+  "total_registradas": 38,
+  "nota": "Datos de ejemplo hasta recibir el listado oficial de las 38 iniciativas (cliente). Las 3 primeras vienen del mockup; el resto es ilustrativo.",
+  "categorias": [
+    { "slug": "vina", "nombre": "Viña", "icono": "vina" },
+    { "slug": "gastronomia", "nombre": "Gastronomía", "icono": "gastronomia" },
+    { "slug": "alojamiento", "nombre": "Alojamiento", "icono": "alojamiento" },
+    { "slug": "tour-operador", "nombre": "Tour Operador", "icono": "tour" },
+    { "slug": "transporte", "nombre": "Transporte", "icono": "transporte" },
+    { "slug": "otro", "nombre": "Otro", "icono": "otro" }
+  ],
+  "iniciativas": [
+    { "nombre": "Viña Casa Rozas", "slug": "vina-casa-rozas", "comuna": "San Rosendo", "categoria": "Viñas y bodegas", "imagen": "vina-casa-rozas", "lat": null, "lng": null, "ejemplo": false },
+    { "nombre": "EcoHotel Antuco", "slug": "ecohotel-antuco", "comuna": "Antuco", "categoria": "Alojamiento", "imagen": "ecohotel-antuco", "lat": null, "lng": null, "ejemplo": false },
+    { "nombre": "Alte Tour", "slug": "alte-tour", "comuna": "Los Ángeles", "categoria": "Tour operador", "imagen": "alte-tour", "lat": null, "lng": null, "ejemplo": false },
+    { "nombre": "Bodega Ejemplo Uno", "slug": "bodega-ejemplo-uno", "comuna": "Yumbel", "categoria": "Viñas y bodegas", "imagen": "barricas", "lat": null, "lng": null, "ejemplo": true },
+    { "nombre": "Mesa del Valle (ejemplo)", "slug": "mesa-del-valle", "comuna": "Cabrero", "categoria": "Gastronomía", "imagen": "ecohotel-antuco", "lat": null, "lng": null, "ejemplo": true },
+    { "nombre": "Ruta Biobío Tours (ejemplo)", "slug": "ruta-biobio-tours", "comuna": "Nacimiento", "categoria": "Tour operador", "imagen": "alte-tour", "lat": null, "lng": null, "ejemplo": true }
+  ]
+}

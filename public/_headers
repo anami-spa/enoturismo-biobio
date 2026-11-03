@@ -1,0 +1,39 @@
+/*
+  # ============================================================
+  # HEADERS DE SEGURIDAD — Cloudflare Pages
+  # Aplican a todas las rutas del sitio.
+  #
+  # ANTES DEL DEPLOY: ajustar CSP según lo que usa el proyecto:
+  #   - Si NO usa GA4: quitar googletagmanager.com y google-analytics.com de script-src/connect-src
+  #   - Si NO usa CF Analytics: quitar static.cloudflareinsights.com de script-src/connect-src
+  #   - Si usa Formspree: ya incluido en connect-src
+  #   - Si usa fonts propias (no @fontsource): ajustar font-src
+  #   - Si embebe videos (YouTube/Vimeo): agregar a frame-src
+  #
+  # Verificar en producción: https://securityheaders.com
+  # ============================================================
+
+  # Clickjacking — bloquea iframes de este sitio en otros dominios
+  X-Frame-Options: DENY
+
+  # MIME sniffing — el navegador respeta el Content-Type declarado
+  X-Content-Type-Options: nosniff
+
+  # Referrer — envía origen solo a HTTPS
+  Referrer-Policy: strict-origin-when-cross-origin
+
+  # Permisos de APIs de browser — mínimo necesario
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+
+  # HSTS — fuerza HTTPS por 1 año, incluye subdominios
+  # ADVERTENCIA: solo activar cuando el sitio esté COMPLETAMENTE en HTTPS
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+
+  # Content Security Policy
+  # 'unsafe-inline' en script-src: requerido por gtag inline. Mitigado por restrict de dominios.
+  # 'unsafe-inline' en style-src: requerido por Tailwind 4 / Astro inlineStylesheets.
+  # Si el proyecto no usa GA4 ni CF Analytics, retirar 'unsafe-inline' de script-src y usar nonce.
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://formspree.io https://www.google-analytics.com https://analytics.google.com https://cloudflareinsights.com; frame-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://formspree.io; upgrade-insecure-requests
+
+  # Protección XSS adicional (navegadores legacy)
+  X-XSS-Protection: 1; mode=block

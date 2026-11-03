@@ -1,0 +1,57 @@
+---
+import { Image } from 'astro:assets'
+import logo from '../../assets/logo/logo-blanco.webp'
+import { url } from '../../utils/url'
+
+const enlaces = [
+  { texto: 'Inicio', href: url(), actual: true },
+  { texto: 'Explorar', href: '#explorar' },
+  { texto: 'Rutas y Experiencias', href: '#rutas' },
+  { texto: 'Sobre el proyecto', href: '#sobre' },
+  { texto: 'Contacto', href: '#contacto' },
+]
+---
+
+<header class="absolute inset-x-0 top-0 z-30">
+  <div class="mx-auto flex max-w-[1440px] items-start justify-between px-5 pt-5 md:px-10 lg:px-14">
+    <a href={url()} aria-label="Enoturismo Biobío — Herencia viva, ir al inicio" class="block shrink-0">
+      <Image src={logo} alt="" width={110} class="h-auto w-[72px] md:w-[96px] lg:w-[112px]" loading="eager" />
+    </a>
+
+    <!-- Desktop -->
+    <nav aria-label="Principal" class="hidden items-center gap-8 pt-3 lg:flex lg:pr-10">
+      <ul class="flex items-center gap-6 xl:gap-8 [text-shadow:0_1px_8px_rgb(0_0_0/0.55)] text-[1.15rem] font-normal tracking-wide text-white xl:text-[1.4rem]">
+        {enlaces.map((e) => (
+          <li>
+            <a
+              href={e.href}
+              aria-current={e.actual ? 'page' : undefined}
+              class="inline-flex min-h-11 items-center underline-offset-8 hover:underline aria-[current=page]:underline"
+            >{e.texto}</a>
+          </li>
+        ))}
+      </ul>
+      <a href={url('/explorar/')} aria-label="Buscar" class="grid h-11 w-11 place-items-center rounded-full text-white hover:bg-white/15">
+        <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      </a>
+    </nav>
+
+    <!-- Móvil / tablet: <details> nativo, sin JavaScript -->
+    <details class="group relative lg:hidden">
+      <summary
+        class="grid h-11 w-11 cursor-pointer list-none place-items-center rounded-full bg-black/35 text-white backdrop-blur [&::-webkit-details-marker]:hidden"
+        aria-label="Menú"
+      >
+        <svg viewBox="0 0 24 24" class="h-6 w-6 group-open:hidden" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <svg viewBox="0 0 24 24" class="hidden h-6 w-6 group-open:block" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </summary>
+      <nav aria-label="Principal (móvil)" class="absolute right-0 mt-2 w-64 rounded-2xl bg-ciruela-oscuro p-3 shadow-xl">
+        <ul class="flex flex-col text-lg">
+          {enlaces.map((e) => (
+            <li><a href={e.href} class="block rounded-lg px-4 py-3 hover:bg-white/10">{e.texto}</a></li>
+          ))}
+        </ul>
+      </nav>
+    </details>
+  </div>
+</header>

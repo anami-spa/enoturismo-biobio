@@ -1,0 +1,23 @@
+---
+/**
+ * index.astro — Home de Enoturismo Biobío (prototipo).
+ * Cada sección es HTML + Tailwind plano para migrar 1:1 a partials Blade de anami-cms.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Header from '../components/home/Header.astro'
+import Hero from '../components/home/Hero.astro'
+import Explora from '../components/home/Explora.astro'
+import Footer from '../components/home/Footer.astro'
+---
+
+<BaseLayout
+  title="Enoturismo Biobío — Herencia viva"
+  description="Descubre el enoturismo del Biobío: viñas, gastronomía, alojamiento y experiencias para conocer el sur de Chile a través de sus vinos, paisajes y personas."
+>
+  <Header />
+  <main id="contenido-principal">
+    <Hero />
+    <Explora />
+  </main>
+  <Footer />
+</BaseLayout>

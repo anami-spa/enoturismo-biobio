@@ -1,0 +1,144 @@
+---
+/**
+ * SEO.astro — Componente centralizado de metadatos
+ * Incluye: title, description, canonical, OG, Twitter Card, JSON-LD (LocalBusiness + FAQPage)
+ *
+ * Uso:
+ * <SEO
+ *   title="Mi Landing"
+ *   description="Descripción de 150-160 chars"
+ *   canonicalURL={new URL(Astro.url.pathname, Astro.site)}
+ *   ogImage="/og-image.jpg"
+ *   business={businessData}
+ *   faqs={faqsData}
+ * />
+ */
+
+export interface Props {
+  title: string
+  description: string
+  canonicalURL?: URL
+  ogImage?: string
+  ogType?: 'website' | 'article'
+  // Datos de negocio para JSON-LD LocalBusiness
+  business?: {
+    name: string
+    description: string
+    url: string
+    telephone?: string
+    email?: string
+    address: {
+      streetAddress: string
+      addressLocality: string   // Concepción
+      addressRegion: string     // Biobío
+      postalCode?: string
+      addressCountry: string    // CL
+    }
+    geo?: {
+      latitude: number
+      longitude: number
+    }
+    openingHours?: string[]     // ej. ['Mo-Fr 09:00-18:00']
+    areaServed?: string         // ej. 'Concepción, Biobío, Chile'
+    image?: string
+    priceRange?: string
+    sameAs?: string[]           // LinkedIn, Instagram, etc.
+  }
+  // FAQs para FAQPage schema + rich result de Google
+  faqs?: Array<{
+    question: string
+    answer: string
+  }>
+}
+
+const {
+  title,
+  description,
+  canonicalURL = new URL(Astro.url.pathname, Astro.site),
+  ogImage = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/og-default.jpg`,
+  ogType = 'website',
+  business,
+  faqs,
+} = Astro.props
+
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? ''
+const ogImageAbsolute = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`
+
+// JSON-LD LocalBusiness
+const localBusinessSchema = business ? {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: business.name,
+  description: business.description,
+  url: business.url,
+  ...(business.telephone && { telephone: business.telephone }),
+  ...(business.email && { email: business.email }),
+  address: {
+    '@type': 'PostalAddress',
+    ...business.address,
+  },
+  ...(business.geo && {
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: business.geo.latitude,
+      longitude: business.geo.longitude,
+    },
+  }),
+  ...(business.openingHours && { openingHoursSpecification: business.openingHours }),
+  ...(business.areaServed && { areaServed: business.areaServed }),
+  ...(business.image && { image: business.image }),
+  ...(business.priceRange && { priceRange: business.priceRange }),
+  ...(business.sameAs && { sameAs: business.sameAs }),
+} : null
+
+// JSON-LD FAQPage
+const faqSchema = faqs && faqs.length > 0 ? {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map(faq => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.answer,
+    },
+  })),
+} : null
+---
+
+<!-- Metadatos básicos -->
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalURL.toString()} />
+
+<!-- Open Graph -->
+<meta property="og:type" content={ogType} />
+<meta property="og:url" content={canonicalURL.toString()} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={ogImageAbsolute} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content="es_CL" />
+{business && <meta property="og:site_name" content={business.name} />}
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImageAbsolute} />
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/favicon.png`} />
+
+<!-- JSON-LD: LocalBusiness -->
+{localBusinessSchema && (
+  <script type="application/ld+json" set:html={JSON.stringify(localBusinessSchema, null, 0)} />
+)}
+
+<!-- JSON-LD: FAQPage (para rich results de Google) -->
+{faqSchema && (
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema, null, 0)} />
+)}
