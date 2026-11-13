@@ -1,0 +1,135 @@
+---
+/**
+ * Explorar — listado y mapa de iniciativas, con filtros combinables (comuna × categoría) y búsqueda.
+ * HTML + Tailwind plano; el filtrado vive en src/scripts/explorar.ts. Sin JS se ven todas las tarjetas.
+ */
+import { getImage } from 'astro:assets'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import Header from '../../components/home/Header.astro'
+import Footer from '../../components/home/Footer.astro'
+import TarjetaIniciativa from '../../components/home/TarjetaIniciativa.astro'
+import { iniciativas, categorias, comunas, foto, nombreCategoria, nombreComuna, normalizar } from '../../utils/iniciativas'
+import { url } from '../../utils/url'
+
+const pines = await Promise.all(
+  iniciativas.map(async (i) => ({
+    slug: i.slug,
+    nombre: i.nombre,
+    comuna: i.comuna,
+    comunaNombre: nombreComuna(i.comuna),
+    categoria: i.categoria,
+    categoriaNombre: nombreCategoria(i.categoria),
+    lat: i.lat,
+    lng: i.lng,
+    foto: (await getImage({ src: foto(i.imagen), width: 240, height: 160, format: 'webp' })).src,
+    href: url(`/explorar/${i.slug}/`),
+  })),
+)
+
+const comunasConIniciativas = comunas.filter((c) => iniciativas.some((i) => i.comuna === c.slug))
+const chip =
+  'inline-flex min-h-11 items-center rounded-full border border-white/40 px-4 text-base tracking-wide text-white hover:bg-white/10 aria-pressed:border-white aria-pressed:bg-burdeos aria-pressed:font-semibold disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent lg:text-lg'
+---
+
+<BaseLayout title="Explorar — Enoturismo Biobío" description="Explora las iniciativas de enoturismo del Biobío por comuna y categoría, en lista o en mapa: viñas, gastronomía, alojamiento y experiencias.">
+  <noscript><style>#controles { display: none; }</style></noscript>
+  <Header actual="explorar" solido />
+
+  <main id="contenido-principal">
+    <section class="bg-ciruela pb-8 pt-6 md:pb-10 md:pt-10" aria-labelledby="titulo-explorar">
+      <div class="mx-auto max-w-[1440px] px-5 md:px-10 lg:px-24">
+        <h1 id="titulo-explorar" class="text-[2rem] font-bold leading-tight md:text-5xl lg:text-[3.4rem]">Descubre el destino a tu manera</h1>
+
+        <!-- Controles: visibles desde el servidor para no mover el layout al cargar el JS. Sin JS se ocultan (noscript) y la lista completa sigue visible -->
+        <div id="controles" class="mt-6 grid grid-cols-[minmax(0,1fr)] gap-5">
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div class="relative w-full sm:max-w-sm">
+              <label for="buscar" class="sr-only">Buscar por nombre</label>
+              <svg viewBox="0 0 24 24" class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+              <input id="buscar" type="search" autocomplete="off" placeholder="Buscar por nombre" class="min-h-12 w-full rounded-xl bg-ciruela-oscuro pl-12 pr-4 text-lg tracking-wide text-white placeholder:text-white/70" />
+            </div>
+
+            <div role="group" aria-label="Vista de resultados" class="inline-flex rounded-xl bg-ciruela-oscuro p-1">
+              <button type="button" data-vista="lista" aria-pressed="true" class="inline-flex min-h-11 items-center gap-2 rounded-lg px-5 text-lg tracking-wide aria-pressed:bg-noche aria-pressed:font-semibold">
+                <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></svg>
+                Lista
+              </button>
+              <button type="button" data-vista="mapa" aria-pressed="false" class="inline-flex min-h-11 items-center gap-2 rounded-lg px-5 text-lg tracking-wide aria-pressed:bg-noche aria-pressed:font-semibold">
+                <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+                Mapa
+              </button>
+            </div>
+          </div>
+
+          <div role="group" aria-labelledby="etq-comuna" data-filtro="comuna">
+            <p id="etq-comuna" class="mb-2 text-sm font-semibold uppercase tracking-[0.2em]">Comuna</p>
+            <div class="-mx-5 flex gap-2 overflow-x-auto px-5 pb-1 md:mx-0 md:flex-wrap md:overflow-visible md:px-0 [scrollbar-width:none]">
+              <button type="button" data-valor="" aria-pressed="true" class={`${chip} shrink-0`}>Todas</button>
+              {comunasConIniciativas.map((c) => (
+                <button type="button" data-valor={c.slug} aria-pressed="false" class={`${chip} shrink-0`}>
+                  {c.nombre} <span class="ml-1.5 text-sm opacity-80" data-cuenta>({iniciativas.filter((i) => i.comuna === c.slug).length})</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div role="group" aria-labelledby="etq-categoria" data-filtro="categoria">
+            <p id="etq-categoria" class="mb-2 text-sm font-semibold uppercase tracking-[0.2em]">Categoría</p>
+            <div class="-mx-5 flex gap-2 overflow-x-auto px-5 pb-1 md:mx-0 md:flex-wrap md:overflow-visible md:px-0 [scrollbar-width:none]">
+              <button type="button" data-valor="" aria-pressed="true" class={`${chip} shrink-0`}>Todas</button>
+              {categorias.map((c) => (
+                <button type="button" data-valor={c.slug} aria-pressed="false" class={`${chip} shrink-0`}>
+                  {c.nombre} <span class="ml-1.5 text-sm opacity-80" data-cuenta>({iniciativas.filter((i) => i.categoria === c.slug).length})</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-burdeos pb-20 pt-8 md:pt-10" aria-labelledby="titulo-resultados">
+      <h2 id="titulo-resultados" class="sr-only">Resultados</h2>
+      <div class="mx-auto max-w-[1440px] px-5 md:px-10 lg:px-24">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <p id="contador" role="status" aria-live="polite" class="text-lg font-semibold tracking-wide md:text-xl">
+            {iniciativas.length} resultados
+          </p>
+          <button id="limpiar" type="button" hidden class="inline-flex min-h-11 items-center rounded-full px-4 text-base tracking-wide underline underline-offset-4 hover:bg-white/10">Limpiar filtros</button>
+        </div>
+
+        <ul id="lista" class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {iniciativas.map((i, n) => (
+            <TarjetaIniciativa
+              prioritaria={n < 3}
+              ancho="w-full"
+              nombre={i.nombre}
+              comuna={nombreComuna(i.comuna)}
+              categoria={nombreCategoria(i.categoria)}
+              imagen={foto(i.imagen)}
+              href={url(`/explorar/${i.slug}/`)}
+              datos={{ 'data-slug': i.slug, 'data-comuna': i.comuna, 'data-categoria': i.categoria, 'data-nombre': normalizar(i.nombre) }}
+            />
+          ))}
+        </ul>
+
+        <div id="vacio" hidden class="mt-10 rounded-2xl bg-ciruela-oscuro p-8 text-center">
+          <p class="text-xl font-semibold">No hay iniciativas con esos filtros.</p>
+          <p class="mt-2 text-lg font-light">Prueba otra comuna, otra categoría o borra la búsqueda.</p>
+        </div>
+
+        <div id="vista-mapa" hidden class="mt-6 isolate scroll-mt-4 overflow-hidden rounded-2xl">
+          <div id="mapa" class="h-[calc(100vh-2rem)] max-h-[760px] min-h-[360px] w-full bg-ciruela-oscuro" role="region" aria-label="Mapa de iniciativas"></div>
+        </div>
+        <p id="mapa-error" hidden class="mt-6 rounded-2xl bg-ciruela-oscuro p-6 text-center text-lg">No se pudo cargar el mapa. Puedes seguir usando la vista Lista.</p>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+
+  <script id="datos-pines" type="application/json" set:html={JSON.stringify(pines)} />
+  <script>
+    import '../../scripts/explorar'
+  </script>
+</BaseLayout>

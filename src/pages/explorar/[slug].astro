@@ -1,0 +1,99 @@
+---
+/**
+ * Ficha de iniciativa: una página estática por cada entrada de src/data/iniciativas.json.
+ * Orden de lectura: descripción → datos prácticos → contacto → ubicación → cercanas.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import Header from '../../components/home/Header.astro'
+import Footer from '../../components/home/Footer.astro'
+import Galeria from '../../components/explorar/ficha/Galeria.astro'
+import Contacto from '../../components/explorar/ficha/Contacto.astro'
+import Ubicacion from '../../components/explorar/ficha/Ubicacion.astro'
+import Cercanos from '../../components/explorar/ficha/Cercanos.astro'
+import { iniciativas, nombreCategoria, nombreComuna } from '../../utils/iniciativas'
+import type { Iniciativa } from '../../utils/iniciativas'
+import { url } from '../../utils/url'
+
+export function getStaticPaths() {
+  return iniciativas.map((i) => ({ params: { slug: i.slug }, props: { i } }))
+}
+
+const { i } = Astro.props as { i: Iniciativa }
+const comuna = nombreComuna(i.comuna)
+const categoria = nombreCategoria(i.categoria)
+---
+
+<BaseLayout title={`${i.nombre} — ${comuna} — Enoturismo Biobío`} description={`${i.nombre}: ${categoria.toLowerCase()} en ${comuna}, Región del Biobío. ${i.descripcion}`}>
+  <Header actual="explorar" solido />
+
+  <main id="contenido-principal" class="bg-burdeos pb-20 pt-6 md:pt-8">
+    <div class="mx-auto max-w-[1440px] px-5 md:px-10 lg:px-24">
+      <nav aria-label="Ruta de navegación" class="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 text-base tracking-wide md:text-lg">
+        <ol class="flex flex-wrap items-center gap-x-2">
+          <li><a href={url()} class="inline-flex min-h-11 items-center underline-offset-4 hover:underline">Inicio</a></li>
+          <li aria-hidden="true">›</li>
+          <li><a href={url('/explorar/')} class="inline-flex min-h-11 items-center underline-offset-4 hover:underline">Explorar</a></li>
+          <li aria-hidden="true">›</li>
+          <li><a href={url(`/explorar/?categoria=${i.categoria}`)} class="inline-flex min-h-11 items-center underline-offset-4 hover:underline">{categoria}</a></li>
+          <li aria-hidden="true">›</li>
+          <li aria-current="page" class="font-semibold">{i.nombre}</li>
+        </ol>
+        <a id="volver" href={url('/explorar/')} class="inline-flex min-h-11 items-center gap-2 underline underline-offset-4 hover:no-underline">← Volver a resultados</a>
+      </nav>
+
+      <div class="mt-6 grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-14">
+        <Galeria nombre={i.nombre} fotos={i.galeria} />
+
+        <div>
+          <h1 class="text-4xl font-bold leading-tight md:text-5xl lg:text-[3.4rem]">{i.nombre}</h1>
+          <p class="mt-4 flex flex-wrap items-center gap-3 text-lg tracking-wide">
+            <a href={url(`/explorar/?comuna=${i.comuna}`)} class="inline-flex min-h-11 items-center gap-1.5 rounded-full bg-ciruela px-4 hover:bg-ciruela/80">
+              <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+              {comuna} · Región del Biobío
+            </a>
+            <a href={url(`/explorar/?categoria=${i.categoria}`)} class="inline-flex min-h-11 items-center rounded-full bg-ciruela px-4 hover:bg-ciruela/80">{categoria}</a>
+          </p>
+
+          <p class="mt-6 text-xl font-light leading-relaxed">{i.descripcion}</p>
+
+          <section aria-labelledby="titulo-practicos" class="mt-8">
+            <h2 id="titulo-practicos" class="text-2xl font-bold md:text-3xl">Datos prácticos</h2>
+            <dl class="mt-4 grid gap-x-8 gap-y-3 text-lg sm:grid-cols-[max-content_1fr]">
+              <dt class="font-semibold">Horario</dt>
+              <dd class="font-light">{i.horario}</dd>
+              <dt class="font-semibold">Reserva</dt>
+              <dd class="font-light">{i.reserva ? 'Requiere reserva previa' : 'No requiere reserva'}</dd>
+              <dt class="font-semibold">Servicios</dt>
+              <dd class="font-light">{i.servicios.join(' · ')}</dd>
+            </dl>
+          </section>
+
+          <div class="mt-8"><Contacto nombre={i.nombre} contacto={i.contacto} /></div>
+        </div>
+      </div>
+
+      <div class="mt-14 max-w-3xl">
+        <Ubicacion nombre={i.nombre} direccion={i.direccion} lat={i.lat} lng={i.lng} aproximada={i.coords_aprox} />
+      </div>
+
+      <Cercanos iniciativa={i} />
+
+      {i.contenido_ejemplo && (
+        <p class="mt-14 rounded-xl bg-ciruela-oscuro p-4 text-base font-light">Prototipo: la descripción, los datos de contacto y la ubicación de esta ficha son de ejemplo, hasta recibir la información oficial de cada iniciativa.</p>
+      )}
+    </div>
+  </main>
+
+  <Footer />
+
+  <script>
+    // "Volver a resultados" conserva los filtros con los que se llegó a la ficha.
+    const volver = document.getElementById('volver') as HTMLAnchorElement | null
+    try {
+      const consulta = sessionStorage.getItem('explorar:consulta')
+      if (volver && consulta) volver.href += consulta
+    } catch {
+      /* sin sessionStorage: vuelve a Explorar sin filtros */
+    }
+  </script>
+</BaseLayout>

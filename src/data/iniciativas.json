@@ -1,20 +1,126 @@
 {
   "total_registradas": 38,
-  "nota": "Datos de ejemplo hasta recibir el listado oficial de las 38 iniciativas (cliente). Las 3 primeras vienen del mockup; el resto es ilustrativo.",
+  "nota": "Datos de ejemplo hasta recibir el listado oficial de las 38 iniciativas (cliente). Nombres de las 6 primeras vienen del mockup; descripciones, contactos y coordenadas (aprox. al centro de la comuna) son ilustrativos y se marcan con ejemplo / coords_aprox.",
   "categorias": [
     { "slug": "vina", "nombre": "Viña", "icono": "vina" },
     { "slug": "gastronomia", "nombre": "Gastronomía", "icono": "gastronomia" },
     { "slug": "alojamiento", "nombre": "Alojamiento", "icono": "alojamiento" },
-    { "slug": "tour-operador", "nombre": "Tour Operador", "icono": "tour" },
+    { "slug": "tour-operador", "nombre": "Tour operador", "icono": "tour" },
     { "slug": "transporte", "nombre": "Transporte", "icono": "transporte" },
     { "slug": "otro", "nombre": "Otro", "icono": "otro" }
   ],
+  "comunas": [
+    { "slug": "concepcion", "nombre": "Concepción", "lat": -36.827, "lng": -73.05 },
+    { "slug": "yumbel", "nombre": "Yumbel", "lat": -37.098, "lng": -72.557 },
+    { "slug": "san-rosendo", "nombre": "San Rosendo", "lat": -37.272, "lng": -72.722 },
+    { "slug": "nacimiento", "nombre": "Nacimiento", "lat": -37.503, "lng": -72.671 },
+    { "slug": "laja", "nombre": "Laja", "lat": -37.282, "lng": -72.711 },
+    { "slug": "antuco", "nombre": "Antuco", "lat": -37.33, "lng": -71.683 },
+    { "slug": "los-angeles", "nombre": "Los Ángeles", "lat": -37.47, "lng": -72.353 },
+    { "slug": "cabrero", "nombre": "Cabrero", "lat": -37.037, "lng": -72.403 }
+  ],
   "iniciativas": [
-    { "nombre": "Viña Casa Rozas", "slug": "vina-casa-rozas", "comuna": "San Rosendo", "categoria": "Viñas y bodegas", "imagen": "vina-casa-rozas", "lat": null, "lng": null, "ejemplo": false },
-    { "nombre": "EcoHotel Antuco", "slug": "ecohotel-antuco", "comuna": "Antuco", "categoria": "Alojamiento", "imagen": "ecohotel-antuco", "lat": null, "lng": null, "ejemplo": false },
-    { "nombre": "Alte Tour", "slug": "alte-tour", "comuna": "Los Ángeles", "categoria": "Tour operador", "imagen": "alte-tour", "lat": null, "lng": null, "ejemplo": false },
-    { "nombre": "Bodega Ejemplo Uno", "slug": "bodega-ejemplo-uno", "comuna": "Yumbel", "categoria": "Viñas y bodegas", "imagen": "barricas", "lat": null, "lng": null, "ejemplo": true },
-    { "nombre": "Mesa del Valle (ejemplo)", "slug": "mesa-del-valle", "comuna": "Cabrero", "categoria": "Gastronomía", "imagen": "ecohotel-antuco", "lat": null, "lng": null, "ejemplo": true },
-    { "nombre": "Ruta Biobío Tours (ejemplo)", "slug": "ruta-biobio-tours", "comuna": "Nacimiento", "categoria": "Tour operador", "imagen": "alte-tour", "lat": null, "lng": null, "ejemplo": true }
+    {
+      "nombre": "Viña Casa Rozas", "slug": "vina-casa-rozas", "comuna": "san-rosendo", "categoria": "vina",
+      "imagen": "vina-casa-rozas", "galeria": ["vina-casa-rozas", "uvas-vid", "barricas"],
+      "descripcion": "Viña familiar entre cerros y parronales. Recorrido por los viñedos, bodega y cata de sus vinos de la temporada.",
+      "direccion": "San Rosendo, Región del Biobío",
+      "lat": -37.268, "lng": -72.715,
+      "horario": "Con reserva previa, fines de semana",
+      "servicios": ["Degustación", "Visita a bodega", "Venta de vinos"],
+      "reserva": true,
+      "contacto": { "whatsapp": null, "telefono": null, "email": "contacto@ejemplo.cl", "web": null, "instagram": null },
+      "ejemplo": false, "coords_aprox": true, "contenido_ejemplo": true
+    },
+    {
+      "nombre": "EcoHotel Antuco", "slug": "ecohotel-antuco", "comuna": "antuco", "categoria": "alojamiento",
+      "imagen": "hotel-antuco-exterior", "galeria": ["hotel-antuco-exterior", "hotel-antuco-habitacion", "vendimia", "uvas-vid"],
+      "descripcion": "Hospedaje entre bosques y senderos, a pasos de la cordillera. Habitaciones cómodas, desayuno local y salidas guiadas por el entorno.",
+      "direccion": "Antuco, Región del Biobío",
+      "lat": -37.327, "lng": -71.688,
+      "horario": "Recepción todos los días, 8:00 a 22:00",
+      "servicios": ["Desayuno incluido", "Estacionamiento", "Senderos", "Mascotas con consulta"],
+      "reserva": true,
+      "contacto": { "whatsapp": null, "telefono": "+56 9 0000 0000", "email": "reservas@ejemplo.cl", "web": "https://ejemplo.cl", "instagram": null },
+      "ejemplo": false, "coords_aprox": true, "contenido_ejemplo": true
+    },
+    {
+      "nombre": "Alte Tour", "slug": "alte-tour", "comuna": "los-angeles", "categoria": "tour-operador",
+      "imagen": "alte-tour", "galeria": ["alte-tour", "copa-vino", "vendimia"],
+      "descripcion": "Tours enogastronómicos con salida desde Los Ángeles. Rutas de medio día y día completo por viñas de la zona, con transporte y degustaciones.",
+      "direccion": "Los Ángeles, Región del Biobío",
+      "lat": -37.468, "lng": -72.351,
+      "horario": "Salidas jueves a domingo",
+      "servicios": ["Transporte", "Guía", "Degustaciones"],
+      "reserva": true,
+      "contacto": { "whatsapp": "+56900000000", "telefono": null, "email": null, "web": null, "instagram": null },
+      "ejemplo": false, "coords_aprox": true, "contenido_ejemplo": true
+    },
+    {
+      "nombre": "Pü Wines SpA", "slug": "pu-wines", "comuna": "yumbel", "categoria": "vina",
+      "imagen": "botella-vino", "galeria": ["botella-vino", "uvas-vid"],
+      "descripcion": "Viña boutique de Yumbel. Vinos blancos y tintos de producción limitada, con venta directa en la viña.",
+      "direccion": "Yumbel, Región del Biobío",
+      "lat": -37.095, "lng": -72.565,
+      "horario": "Con reserva previa",
+      "servicios": ["Degustación", "Venta de vinos"],
+      "reserva": true,
+      "contacto": { "whatsapp": null, "telefono": null, "email": "contacto@ejemplo.cl", "web": null, "instagram": null },
+      "ejemplo": false, "coords_aprox": true, "contenido_ejemplo": true
+    },
+    {
+      "nombre": "Sociedad Quinta Rosa Ltda.", "slug": "quinta-rosa", "comuna": "yumbel", "categoria": "vina",
+      "imagen": "alte-tour", "galeria": ["alte-tour", "vendimia"],
+      "descripcion": "Viñedo familiar con recorridos a pie entre las parras y copa en terreno durante la vendimia.",
+      "direccion": "Yumbel, Región del Biobío",
+      "lat": -37.103, "lng": -72.548,
+      "horario": "Temporada de vendimia, con reserva",
+      "servicios": ["Recorrido por el viñedo", "Degustación"],
+      "reserva": true,
+      "contacto": { "whatsapp": null, "telefono": null, "email": "contacto@ejemplo.cl", "web": null, "instagram": null },
+      "ejemplo": false, "coords_aprox": true, "contenido_ejemplo": true
+    },
+    {
+      "nombre": "Viña Umpel", "slug": "vina-umpel", "comuna": "yumbel", "categoria": "vina",
+      "imagen": "copa-vino", "galeria": ["copa-vino", "uvas-vid"],
+      "descripcion": "Viña de pequeña escala. Cata de tintos directamente en el viñedo.",
+      "direccion": "Yumbel, Región del Biobío",
+      "lat": -37.09, "lng": -72.552,
+      "horario": "Fines de semana, con reserva",
+      "servicios": ["Degustación"],
+      "reserva": true,
+      "contacto": { "whatsapp": null, "telefono": null, "email": "contacto@ejemplo.cl", "web": null, "instagram": null },
+      "ejemplo": false, "coords_aprox": true, "contenido_ejemplo": true
+    },
+    {
+      "nombre": "Bodega Ejemplo Uno", "slug": "bodega-ejemplo-uno", "comuna": "yumbel", "categoria": "vina",
+      "imagen": "barricas", "galeria": ["barricas"],
+      "descripcion": "Iniciativa de ejemplo para ilustrar una bodega con visita guiada.",
+      "direccion": "Yumbel, Región del Biobío",
+      "lat": -37.108, "lng": -72.56,
+      "horario": "Por confirmar", "servicios": ["Visita a bodega"], "reserva": false,
+      "contacto": { "whatsapp": null, "telefono": null, "email": null, "web": null, "instagram": null },
+      "ejemplo": true, "coords_aprox": true, "contenido_ejemplo": true
+    },
+    {
+      "nombre": "Mesa del Valle (ejemplo)", "slug": "mesa-del-valle", "comuna": "cabrero", "categoria": "gastronomia",
+      "imagen": "botella-vino", "galeria": ["botella-vino"],
+      "descripcion": "Iniciativa de ejemplo para ilustrar una experiencia gastronómica maridada con vinos locales.",
+      "direccion": "Cabrero, Región del Biobío",
+      "lat": -37.04, "lng": -72.4,
+      "horario": "Por confirmar", "servicios": ["Maridaje"], "reserva": false,
+      "contacto": { "whatsapp": null, "telefono": null, "email": null, "web": null, "instagram": null },
+      "ejemplo": true, "coords_aprox": true, "contenido_ejemplo": true
+    },
+    {
+      "nombre": "Ruta Biobío Tours (ejemplo)", "slug": "ruta-biobio-tours", "comuna": "nacimiento", "categoria": "tour-operador",
+      "imagen": "alte-tour", "galeria": ["alte-tour"],
+      "descripcion": "Iniciativa de ejemplo para ilustrar un operador de rutas por el valle.",
+      "direccion": "Nacimiento, Región del Biobío",
+      "lat": -37.5, "lng": -72.67,
+      "horario": "Por confirmar", "servicios": ["Transporte", "Guía"], "reserva": false,
+      "contacto": { "whatsapp": null, "telefono": null, "email": null, "web": null, "instagram": null },
+      "ejemplo": true, "coords_aprox": true, "contenido_ejemplo": true
+    }
   ]
 }

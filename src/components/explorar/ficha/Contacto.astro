@@ -1,0 +1,51 @@
+---
+import type { Iniciativa } from '../../../utils/iniciativas'
+
+export interface Props {
+  nombre: string
+  contacto: Iniciativa['contacto']
+}
+
+const { nombre, contacto } = Astro.props
+const soloDigitos = (s: string) => s.replace(/\D/g, '')
+const quitarProtocolo = (s: string) => s.replace(/^https?:\/\//, '').replace(/\/$/, '')
+
+const { whatsapp, telefono, email, web, instagram } = contacto
+const wa = whatsapp ? `https://wa.me/${soloDigitos(whatsapp)}?text=${encodeURIComponent(`Hola, vi ${nombre} en Enoturismo Biobío y quiero consultar.`)}` : null
+const secundarios = [
+  telefono && { texto: telefono, href: `tel:${telefono.replace(/[^\d+]/g, '')}`, etiqueta: 'Llamar' },
+  email && { texto: email, href: `mailto:${email}`, etiqueta: 'Correo' },
+  web && { texto: quitarProtocolo(web), href: web, etiqueta: 'Sitio web', externo: true },
+  instagram && { texto: instagram, href: `https://instagram.com/${instagram.replace('@', '')}`, etiqueta: 'Instagram', externo: true },
+].filter(Boolean) as { texto: string; href: string; etiqueta: string; externo?: boolean }[]
+const hayContacto = Boolean(wa) || secundarios.length > 0
+---
+
+<section aria-labelledby="titulo-contacto">
+  <h2 id="titulo-contacto" class="text-2xl font-bold md:text-3xl">Contacto</h2>
+  {hayContacto ? (
+    <div class="mt-4 flex flex-col gap-4">
+      {wa && (
+        <a href={wa} target="_blank" rel="noopener noreferrer" class="inline-flex min-h-14 items-center justify-center gap-3 rounded-xl bg-noche px-8 py-4 text-xl tracking-wide text-white hover:bg-noche/85 sm:self-start">
+          Consultar por WhatsApp
+          <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+          <span class="sr-only">(se abre en una pestaña nueva)</span>
+        </a>
+      )}
+      {secundarios.length > 0 && (
+        <ul class="grid gap-1 text-lg">
+          {secundarios.map((c) => (
+            <li>
+              <a href={c.href} {...(c.externo ? { target: '_blank', rel: 'noopener noreferrer' } : {})} class="inline-flex min-h-11 flex-wrap items-center gap-x-3 underline-offset-4 hover:underline">
+                <span class="font-semibold">{c.etiqueta}:</span> {c.texto}
+                {c.externo && <span class="sr-only">(se abre en una pestaña nueva)</span>}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  ) : (
+    <p class="mt-4 text-lg font-light">Los datos de contacto de esta iniciativa estarán disponibles pronto.</p>
+  )}
+</section>

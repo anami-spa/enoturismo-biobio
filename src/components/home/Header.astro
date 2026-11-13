@@ -3,16 +3,25 @@ import { Image } from 'astro:assets'
 import logo from '../../assets/logo/logo-blanco.webp'
 import { url } from '../../utils/url'
 
+export interface Props {
+  /** Página actual: marca el enlace con aria-current. */
+  actual?: 'inicio' | 'explorar'
+  /** Páginas internas: header con fondo propio, en el flujo normal. El Home lo superpone al hero. */
+  solido?: boolean
+}
+
+const { actual = 'inicio', solido = false } = Astro.props
+
 const enlaces = [
-  { texto: 'Inicio', href: url(), actual: true },
-  { texto: 'Explorar', href: '#explorar' },
-  { texto: 'Rutas y Experiencias', href: '#rutas' },
-  { texto: 'Sobre el proyecto', href: '#sobre' },
-  { texto: 'Contacto', href: '#contacto' },
-]
+  { id: 'inicio', texto: 'Inicio', href: url() },
+  { id: 'explorar', texto: 'Explorar', href: url('/explorar/') },
+  { id: 'rutas', texto: 'Rutas y Experiencias', href: url('/#rutas') },
+  { id: 'sobre', texto: 'Sobre el proyecto', href: url('/#sobre') },
+  { id: 'contacto', texto: 'Contacto', href: url('/#contacto') },
+].map((e) => ({ ...e, actual: e.id === actual }))
 ---
 
-<header class="absolute inset-x-0 top-0 z-30">
+<header class:list={['inset-x-0 top-0 z-30', solido ? 'relative bg-ciruela' : 'absolute']}>
   <div class="mx-auto flex max-w-[1440px] items-start justify-between px-5 pt-5 md:px-10 lg:px-14">
     <a href={url()} aria-label="Enoturismo Biobío — Herencia viva, ir al inicio" class="block shrink-0">
       <Image src={logo} alt="" width={110} class="h-auto w-[72px] md:w-[96px] lg:w-[112px]" loading="eager" />
@@ -31,7 +40,7 @@ const enlaces = [
           </li>
         ))}
       </ul>
-      <a href={url('/explorar/')} aria-label="Buscar" class="grid h-11 w-11 place-items-center rounded-full text-white hover:bg-white/15">
+      <a href={url('/explorar/?buscar')} aria-label="Buscar iniciativas" class="grid h-11 w-11 place-items-center rounded-full text-white hover:bg-white/15">
         <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
       </a>
     </nav>
@@ -48,7 +57,7 @@ const enlaces = [
       <nav aria-label="Principal (móvil)" class="absolute right-0 mt-2 w-64 rounded-2xl bg-ciruela-oscuro p-3 shadow-xl">
         <ul class="flex flex-col text-lg">
           {enlaces.map((e) => (
-            <li><a href={e.href} class="block rounded-lg px-4 py-3 hover:bg-white/10">{e.texto}</a></li>
+            <li><a href={e.href} aria-current={e.actual ? 'page' : undefined} class="block rounded-lg px-4 py-3 hover:bg-white/10 aria-[current=page]:font-bold">{e.texto}</a></li>
           ))}
         </ul>
       </nav>
