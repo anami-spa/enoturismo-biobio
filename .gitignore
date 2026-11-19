@@ -31,3 +31,4 @@ logs/
 # Instrucciones internas para agentes (traen datos del contrato): solo locales
 CLAUDE.md
 AGENTS.md
+__pycache__/

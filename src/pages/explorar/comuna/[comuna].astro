@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro'
+import LandingIniciativas from '../../../components/explorar/LandingIniciativas.astro'
+import { comunas, iniciativas, nombreCategoria } from '../../../utils/iniciativas'
+import { listado, migas } from '../../../utils/schema'
+import { url } from '../../../utils/url'
+
+export function getStaticPaths() {
+  return comunas
+    .filter((c) => iniciativas.some((i) => i.comuna === c.slug))
+    .map((c) => ({ params: { comuna: c.slug }, props: { c, items: iniciativas.filter((i) => i.comuna === c.slug) } }))
+}
+
+const { c, items } = Astro.props
+const origen = Astro.site!.origin
+const ruta = url(`/explorar/comuna/${c.slug}/`)
+const categorias = [...new Set(items.map((i) => nombreCategoria(i.categoria).toLowerCase()))].join(', ')
+const titulo = `Enoturismo en ${c.nombre}`
+const intro = `${items.length} ${items.length === 1 ? 'iniciativa' : 'iniciativas'} de enoturismo en ${c.nombre}, Región del Biobío: ${categorias}.`
+const jsonLd = [
+  listado(origen, 'CollectionPage', titulo, intro, ruta, items.map((i) => ({ nombre: i.nombre, ruta: url(`/explorar/${i.slug}/`) }))),
+  migas(origen, [{ nombre: 'Inicio', ruta: url() }, { nombre: 'Explorar', ruta: url('/explorar/') }, { nombre: c.nombre, ruta }]),
+]
+---
+
+<BaseLayout title={`${titulo} — Enoturismo Biobío`} description={intro} jsonLd={jsonLd}>
+  <LandingIniciativas titulo={titulo} intro={intro} items={items} hrefExplorar={url(`/explorar/?comuna=${c.slug}`)} miga={c.nombre} />
+</BaseLayout>

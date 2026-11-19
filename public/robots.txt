@@ -1,3 +1,0 @@
-# Prototipo interno (sin dominio): no indexar.
-User-agent: *
-Disallow: /

@@ -3,6 +3,7 @@
  * Ficha de iniciativa: una página estática por cada entrada de src/data/iniciativas.json.
  * Orden de lectura: descripción → datos prácticos → contacto → ubicación → cercanas.
  */
+import { getImage } from 'astro:assets'
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import Header from '../../components/home/Header.astro'
 import Footer from '../../components/home/Footer.astro'
@@ -10,7 +11,8 @@ import Galeria from '../../components/explorar/ficha/Galeria.astro'
 import Contacto from '../../components/explorar/ficha/Contacto.astro'
 import Ubicacion from '../../components/explorar/ficha/Ubicacion.astro'
 import Cercanos from '../../components/explorar/ficha/Cercanos.astro'
-import { iniciativas, nombreCategoria, nombreComuna } from '../../utils/iniciativas'
+import { foto, iniciativas, nombreCategoria, nombreComuna, queEs } from '../../utils/iniciativas'
+import { abs, ficha as schemaFicha, migas } from '../../utils/schema'
 import type { Iniciativa } from '../../utils/iniciativas'
 import { url } from '../../utils/url'
 
@@ -21,9 +23,21 @@ export function getStaticPaths() {
 const { i } = Astro.props as { i: Iniciativa }
 const comuna = nombreComuna(i.comuna)
 const categoria = nombreCategoria(i.categoria)
+const origen = Astro.site!.origin
+const ruta = url(`/explorar/${i.slug}/`)
+const og = await getImage({ src: foto(i.imagen), width: 1200, height: 630, fit: 'cover', format: 'jpg' })
+const jsonLd = [
+  schemaFicha(origen, i, comuna, ruta, abs(og.src, origen)),
+  migas(origen, [
+    { nombre: 'Inicio', ruta: url() },
+    { nombre: 'Explorar', ruta: url('/explorar/') },
+    { nombre: categoria, ruta: url(`/explorar/categoria/${i.categoria}/`) },
+    { nombre: i.nombre, ruta },
+  ]),
+]
 ---
 
-<BaseLayout title={`${i.nombre} — ${comuna} — Enoturismo Biobío`} description={`${i.nombre}: ${categoria.toLowerCase()} en ${comuna}, Región del Biobío. ${i.descripcion}`}>
+<BaseLayout title={`${i.nombre} — ${comuna} — Enoturismo Biobío`} description={`${i.nombre}: ${categoria.toLowerCase()} en ${comuna}, Región del Biobío. ${i.descripcion}`} ogImage={og.src} jsonLd={jsonLd}>
   <Header actual="explorar" solido />
 
   <main id="contenido-principal" class="bg-burdeos pb-20 pt-6 md:pt-8">
@@ -54,7 +68,7 @@ const categoria = nombreCategoria(i.categoria)
             <a href={url(`/explorar/?categoria=${i.categoria}`)} class="inline-flex min-h-11 items-center rounded-full bg-ciruela px-4 hover:bg-ciruela/80">{categoria}</a>
           </p>
 
-          <p class="mt-6 text-xl font-light leading-relaxed">{i.descripcion}</p>
+          <p class="mt-6 text-xl font-light leading-relaxed"><strong class="font-semibold">{queEs(i)}</strong> {i.descripcion}</p>
 
           <section aria-labelledby="titulo-practicos" class="mt-8">
             <h2 id="titulo-practicos" class="text-2xl font-bold md:text-3xl">Datos prácticos</h2>

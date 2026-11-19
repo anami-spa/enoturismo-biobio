@@ -5,7 +5,7 @@ import { url } from '../../utils/url'
 
 export interface Props {
   /** Página actual: marca el enlace con aria-current. */
-  actual?: 'inicio' | 'explorar'
+  actual?: 'inicio' | 'explorar' | 'rutas' | 'sobre' | 'contacto'
   /** Páginas internas: header con fondo propio, en el flujo normal. El Home lo superpone al hero. */
   solido?: boolean
 }
@@ -15,9 +15,9 @@ const { actual = 'inicio', solido = false } = Astro.props
 const enlaces = [
   { id: 'inicio', texto: 'Inicio', href: url() },
   { id: 'explorar', texto: 'Explorar', href: url('/explorar/') },
-  { id: 'rutas', texto: 'Rutas y Experiencias', href: url('/#rutas') },
-  { id: 'sobre', texto: 'Sobre el proyecto', href: url('/#sobre') },
-  { id: 'contacto', texto: 'Contacto', href: url('/#contacto') },
+  { id: 'rutas', texto: 'Rutas y Experiencias', href: url('/rutas/') },
+  { id: 'sobre', texto: 'Sobre el proyecto', href: url('/sobre/') },
+  { id: 'contacto', texto: 'Contacto', href: url('/contacto/') },
 ].map((e) => ({ ...e, actual: e.id === actual }))
 ---
 

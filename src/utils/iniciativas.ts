@@ -50,3 +50,24 @@ export const normalizar = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, 
 /** Otras iniciativas de la misma comuna (para "También en {comuna}"). */
 export const cercanas = (i: Iniciativa, max = 3) =>
   iniciativas.filter((o) => o.comuna === i.comuna && o.slug !== i.slug).slice(0, max)
+
+/** "{nombre} es {esto} en {comuna}": primera frase factual de la ficha (la citan buscadores y agentes de IA). */
+const ARTICULO_CATEGORIA: Record<string, string> = {
+  vina: 'una viña',
+  gastronomia: 'una iniciativa gastronómica',
+  alojamiento: 'un alojamiento',
+  'tour-operador': 'un tour operador',
+  transporte: 'un servicio de transporte',
+  otro: 'una iniciativa de enoturismo',
+}
+export const queEs = (i: Iniciativa) => `${i.nombre} es ${ARTICULO_CATEGORIA[i.categoria] ?? 'una iniciativa de enoturismo'} en ${nombreComuna(i.comuna)}, Región del Biobío.`
+
+/** Plural de cada categoría para títulos de las páginas de listado. */
+export const PLURAL_CATEGORIA: Record<string, string> = {
+  vina: 'Viñas',
+  gastronomia: 'Gastronomía',
+  alojamiento: 'Alojamiento',
+  'tour-operador': 'Tour operadores',
+  transporte: 'Transporte',
+  otro: 'Otras iniciativas',
+}

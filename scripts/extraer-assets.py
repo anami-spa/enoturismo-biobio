@@ -46,6 +46,21 @@ def fotos() -> None:
             guardar_webp(im, DESTINO / f"fotos/{nombre}.webp", ancho, 78)
 
 
+def fotos_rutas() -> None:
+    """Fotos nuevas de "Rutas y experiencias" (PDF de nov-2026). Indicar el PDF con ENOTURISMO_PDF_RUTAS; si falta, se omite."""
+    pdf = os.environ.get("ENOTURISMO_PDF_RUTAS")
+    if not pdf or not Path(pdf).expanduser().exists():
+        print("Fotos de Rutas: omitidas (definir ENOTURISMO_PDF_RUTAS con el PDF del mockup de Rutas)")
+        return
+    print("Fotos de Rutas (PDF página 7)")
+    with tempfile.TemporaryDirectory() as tmp:
+        subprocess.run(["pdfimages", "-png", "-f", "7", "-l", "7", str(Path(pdf).expanduser()), f"{tmp}/img"], check=True)
+        # 2: gastronomía (792×528), 5: estación de campo (882×588). Resolución del mockup: pedir originales.
+        for idx, (nombre, ancho) in {2: ("gastronomia-mesa", 800), 5: ("estacion-campo", 900)}.items():
+            im = Image.open(f"{tmp}/img-{idx:03d}.png").convert("RGB")
+            guardar_webp(im, DESTINO / f"fotos/{nombre}.webp", ancho, 80)
+
+
 def logos() -> None:
     print("Logos")
     for n, nombre in {1: "logo-color", 5: "logo-blanco", 6: "logo-blanco-horizontal"}.items():
@@ -73,4 +88,4 @@ def decoracion() -> None:
 if __name__ == "__main__":
     if not ORIGEN.exists():
         raise SystemExit(f"No existe la carpeta de origen: {ORIGEN} (definir ENOTURISMO_ORIGEN)")
-    fotos(); logos(); iconos(); decoracion()
+    fotos(); fotos_rutas(); logos(); iconos(); decoracion()

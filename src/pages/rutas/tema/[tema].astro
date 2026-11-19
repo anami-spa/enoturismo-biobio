@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro'
+import ListadoRutas from '../../../components/rutas/ListadoRutas.astro'
+import { articulosDeTema, temas } from '../../../utils/articulos'
+import { migas, listado } from '../../../utils/schema'
+import { url } from '../../../utils/url'
+
+export function getStaticPaths() {
+  return temas.map((t) => ({ params: { tema: t.slug }, props: { t } }))
+}
+
+const { t } = Astro.props
+const origen = Astro.site!.origin
+const ruta = url(`/rutas/tema/${t.slug}/`)
+const descripcion = `${t.descripcion} Historias de ${t.nombre.toLowerCase()} del enoturismo en el Biobío.`
+const jsonLd = [
+  listado(origen, 'CollectionPage', `Historias de ${t.nombre.toLowerCase()}`, descripcion, ruta, articulosDeTema(t.slug).map((a) => ({ nombre: a.titulo, ruta: url(`/rutas/${a.slug}/`) }))),
+  migas(origen, [{ nombre: 'Inicio', ruta: url() }, { nombre: 'Rutas y experiencias', ruta: url('/rutas/') }, { nombre: t.nombre, ruta }]),
+]
+---
+
+<BaseLayout title={`${t.nombre} — Rutas y experiencias — Enoturismo Biobío`} description={descripcion} jsonLd={jsonLd}>
+  <ListadoRutas tema={t.slug} />
+</BaseLayout>

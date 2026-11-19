@@ -1,27 +1,44 @@
 ---
 import SEO from '../components/SEO.astro'
+import { INDEXAR } from '../utils/config'
 import '../styles/global.css'
+import barlow300 from '@fontsource/barlow/files/barlow-latin-300-normal.woff2?url'
+import barlow400 from '@fontsource/barlow/files/barlow-latin-400-normal.woff2?url'
+import barlow700 from '@fontsource/barlow/files/barlow-latin-700-normal.woff2?url'
 
 export interface Props {
   title: string
   description: string
   ogImage?: string
+  ogType?: 'website' | 'article'
+  /** Bloques JSON-LD (schema.org) de la página. */
+  jsonLd?: object[]
+  /**
+   * Precarga de Barlow: evita el salto de layout (CLS) en páginas con mucho texto sobre el pliegue.
+   * La Home la desactiva: medido en Lighthouse móvil, con precarga el hero pasa a ser el LCP (2,9 s, perf 95) y sin ella queda 100.
+   */
+  precargarFuentes?: boolean
 }
 
-const { title, description, ogImage } = Astro.props
+const { title, description, ogImage, ogType, jsonLd, precargarFuentes = true } = Astro.props
 ---
 
 <!doctype html>
 <html lang="es">
   <head>
+    {precargarFuentes && [barlow300, barlow400, barlow700].map((href) => (
+      <link rel="preload" as="font" type="font/woff2" href={href} crossorigin />
+    ))}
     <SEO
       title={title}
       description={description}
       canonicalURL={new URL(Astro.url.pathname, Astro.site)}
       ogImage={ogImage}
+      ogType={ogType}
+      jsonLd={jsonLd}
     />
-    <!-- Prototipo interno: no indexar hasta que el proyecto pase a producción -->
-    <meta name="robots" content="noindex, nofollow" />
+    <!-- Prototipo con datos de ejemplo: no indexar hasta producción (INDEXAR=true, ver astro.config.mjs) -->
+    <meta name="robots" content={INDEXAR ? 'index, follow, max-image-preview:large' : 'noindex, nofollow'} />
   </head>
 
   <body>

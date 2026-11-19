@@ -1,0 +1,53 @@
+---
+/** Listado de historias, compartido por /rutas/ (todas) y /rutas/tema/[tema]/ (filtrado). Estático: sin JS. */
+import Header from '../home/Header.astro'
+import Footer from '../home/Footer.astro'
+import TarjetaArticulo from './TarjetaArticulo.astro'
+import { articulos, articulosDeTema, temas } from '../../utils/articulos'
+import { url } from '../../utils/url'
+
+export interface Props {
+  /** Slug del tema activo; sin valor = todas. */
+  tema?: string
+}
+
+const { tema } = Astro.props
+const temaActual = temas.find((t) => t.slug === tema)
+const lista = tema ? articulosDeTema(tema) : articulos
+const chip =
+  'inline-flex min-h-11 items-center rounded-full border border-white/40 px-5 text-lg tracking-wide text-white hover:bg-white/10 aria-[current=page]:border-white aria-[current=page]:bg-burdeos aria-[current=page]:font-semibold lg:text-xl'
+---
+
+<Header actual="rutas" solido />
+
+<main id="contenido-principal">
+  <section class="bg-ciruela pb-8 pt-6 md:pb-10 md:pt-10" aria-labelledby="titulo-rutas">
+    <div class="mx-auto max-w-[1440px] px-5 md:px-10 lg:px-24">
+      <h1 id="titulo-rutas" class="text-[2.2rem] font-bold leading-tight md:text-5xl lg:text-[4.2rem]">
+        {temaActual ? `Historias de ${temaActual.nombre.toLowerCase()}` : 'Historias, rutas y experiencias'}
+      </h1>
+      <p class="mt-4 max-w-3xl text-lg tracking-wide md:text-xl">
+        {temaActual ? temaActual.descripcion : 'Descubre el patrimonio vivo a través de sus paisajes, vinos y personas.'}
+      </p>
+      <nav aria-label="Filtrar historias por tema" class="mt-7">
+        <ul class="flex flex-wrap gap-3">
+          <li><a href={url('/rutas/')} class={chip} aria-current={tema ? undefined : 'page'}>Todas</a></li>
+          {temas.map((t) => (
+            <li><a href={url(`/rutas/tema/${t.slug}/`)} class={chip} aria-current={tema === t.slug ? 'page' : undefined}>{t.nombre}</a></li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+  </section>
+
+  <section class="bg-noche pb-20 pt-10 md:pb-28 md:pt-14" aria-label="Historias">
+    <div class="mx-auto max-w-[1440px] px-5 md:px-10 lg:px-24">
+      <p class="mb-8 text-lg tracking-wide text-white/85" role="status">{lista.length} {lista.length === 1 ? 'historia' : 'historias'}</p>
+      <ul class="grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+        {lista.map((a, n) => <TarjetaArticulo articulo={a} prioritaria={n < 3} />)}
+      </ul>
+    </div>
+  </section>
+</main>
+
+<Footer />
