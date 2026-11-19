@@ -1,0 +1,42 @@
+---
+/** Política de privacidad — BORRADOR. Los textos marcados "pendiente" los define el mandante (responsable del tratamiento). */
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import Header from '../../components/home/Header.astro'
+import Footer from '../../components/home/Footer.astro'
+import { migas } from '../../utils/schema'
+import { url } from '../../utils/url'
+
+const origen = Astro.site!.origin
+const secciones = [
+  { t: 'Responsable del tratamiento', p: ['Pendiente: razón social, RUT y correo del responsable, a definir por el mandante del proyecto (PTI Enoturismo del Biobío).'] },
+  { t: 'Qué datos recogemos', p: ['A través del formulario de contacto: nombre, correo electrónico, tipo de consulta y mensaje. Este sitio no usa cookies propias ni herramientas de analítica.', 'En esta versión de prueba el formulario no envía ni almacena datos.'] },
+  { t: 'Para qué los usamos', p: ['Únicamente para responder tu consulta y, si lo solicitas, orientarte para sumar tu iniciativa al catálogo.'] },
+  { t: 'Mapa y terceros', p: ['La vista de mapa carga cartografía de OpenStreetMap. Al abrirla, tu dirección IP se envía a ese servicio para entregarte los mapas. Pendiente: evaluar un proveedor alternativo antes de producción.'] },
+  { t: 'Cuánto tiempo los conservamos', p: ['Pendiente: plazo de conservación a definir por el mandante.'] },
+  { t: 'Tus derechos', p: ['Puedes solicitar acceso, rectificación, supresión, oposición, portabilidad y bloqueo de tus datos personales, conforme a la Ley N° 21.719. Pendiente: canal para ejercerlos.'] },
+]
+const jsonLd = [migas(origen, [{ nombre: 'Inicio', ruta: url() }, { nombre: 'Privacidad', ruta: url('/privacidad/') }])]
+---
+
+<BaseLayout title="Política de privacidad — Enoturismo Biobío" description="Cómo trata los datos personales el sitio de Enoturismo Biobío: formulario de contacto, mapa y derechos de las personas." jsonLd={jsonLd}>
+  <Header solido />
+
+  <main id="contenido-principal" class="bg-ciruela pb-20 pt-8 md:pb-28 md:pt-12">
+    <div class="mx-auto max-w-[1440px] px-5 md:px-10 lg:px-24">
+      <div class="max-w-3xl">
+        <h1 class="text-[2.4rem] font-bold leading-tight md:text-5xl">Política de privacidad</h1>
+        <p class="mt-4 inline-block rounded-full bg-ciruela-oscuro px-4 py-1.5 text-base font-semibold tracking-wide text-amarillo">Borrador · pendiente de revisión del mandante</p>
+        <div class="mt-8 space-y-9">
+          {secciones.map((s) => (
+            <section>
+              <h2 class="text-2xl font-bold md:text-3xl">{s.t}</h2>
+              {s.p.map((p) => <p class="mt-3 text-xl font-light leading-relaxed">{p}</p>)}
+            </section>
+          ))}
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>

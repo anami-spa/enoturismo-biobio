@@ -1,0 +1,61 @@
+{
+  "nota": "Textos de ejemplo hasta recibir el contenido editorial oficial (cliente). Todo artículo lleva ejemplo: true; con INDEXAR=true el build falla mientras quede alguno.",
+  "temas": [
+    { "slug": "vino-y-patrimonio", "nombre": "Vino y patrimonio", "descripcion": "Historias de viñas, cepas y oficios que sostienen la herencia vitivinícola del Biobío." },
+    { "slug": "gastronomia", "nombre": "Gastronomía", "descripcion": "Sabores, productos y cocinas del territorio para maridar con el vino del Biobío." },
+    { "slug": "naturaleza", "nombre": "Naturaleza", "descripcion": "Paisajes, rutas y escapadas para recorrer el territorio del vino." }
+  ],
+  "articulos": [
+    {
+      "titulo": "El vino y sus territorios",
+      "slug": "el-vino-y-sus-territorios",
+      "tema": "vino-y-patrimonio",
+      "tipo": "Editorial",
+      "extracto": "Las viñas y sus historias forman parte de la herencia viva del Biobío.",
+      "imagen": "uvas-vid",
+      "alt": "Racimos de uva blanca a contraluz entre las hojas de la parra",
+      "fecha": "2026-11-18",
+      "cuerpo": [
+        "Las viñas y sus historias forman parte de la herencia viva del Biobío. Este espacio editorial invita a conocer el paisaje, los oficios y a quienes mantienen esa tradición.",
+        "Texto de ejemplo: aquí irá el desarrollo del artículo, con testimonios de viñateros y datos de las cepas y valles de la región."
+      ],
+      "cta": { "texto": "Explorar viñas", "href": "/explorar/?categoria=vina" },
+      "iniciativas_relacionadas": ["vina-casa-rozas", "pu-wines", "vina-umpel"],
+      "ejemplo": true
+    },
+    {
+      "titulo": "Sabores que cuentan historias",
+      "slug": "sabores-que-cuentan-historias",
+      "tema": "gastronomia",
+      "tipo": "Editorial",
+      "extracto": "Platos y productos que acompañan al vino y mantienen viva la cocina del territorio.",
+      "imagen": "gastronomia-mesa",
+      "alt": "Mesa servida con carne, salmón y puré, junto a una botella y una copa de vino",
+      "fecha": "2026-11-18",
+      "cuerpo": [
+        "Texto de ejemplo: la cocina del Biobío se entiende mejor en la mesa. Este espacio editorial recorrerá los restaurantes y productores que maridan con el vino de la región.",
+        "Texto de ejemplo: aquí irá el desarrollo del artículo, con recetas, productores locales y recomendaciones de maridaje."
+      ],
+      "cta": { "texto": "Explorar gastronomía", "href": "/explorar/?categoria=gastronomia" },
+      "iniciativas_relacionadas": ["mesa-del-valle"],
+      "ejemplo": true
+    },
+    {
+      "titulo": "Una escapada por el Biobío",
+      "slug": "una-escapada-por-el-biobio",
+      "tema": "naturaleza",
+      "tipo": "Editorial",
+      "extracto": "Paisajes, estaciones y caminos para recorrer el territorio del vino.",
+      "imagen": "estacion-campo",
+      "alt": "Antigua estación de ferrocarril entre flores amarillas y tendido eléctrico",
+      "fecha": "2026-11-18",
+      "cuerpo": [
+        "Texto de ejemplo: el Biobío ofrece escapadas que combinan naturaleza, patrimonio ferroviario y vino. Este espacio editorial propondrá recorridos para uno o varios días.",
+        "Texto de ejemplo: aquí irá el desarrollo del artículo, con itinerarios sugeridos y alojamientos en el camino."
+      ],
+      "cta": { "texto": "Explorar el territorio", "href": "/explorar/" },
+      "iniciativas_relacionadas": ["ecohotel-antuco", "alte-tour"],
+      "ejemplo": true
+    }
+  ]
+}

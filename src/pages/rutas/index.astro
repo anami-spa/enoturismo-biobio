@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import ListadoRutas from '../../components/rutas/ListadoRutas.astro'
+import { articulos } from '../../utils/articulos'
+import { migas, listado } from '../../utils/schema'
+import { url } from '../../utils/url'
+
+const origen = Astro.site!.origin
+const ruta = url('/rutas/')
+const descripcion = 'Historias, rutas y experiencias del enoturismo en el Biobío: vino y patrimonio, gastronomía y naturaleza, para descubrir el territorio a través de sus paisajes, vinos y personas.'
+const jsonLd = [
+  listado(origen, 'CollectionPage', 'Historias, rutas y experiencias', descripcion, ruta, articulos.map((a) => ({ nombre: a.titulo, ruta: url(`/rutas/${a.slug}/`) }))),
+  migas(origen, [{ nombre: 'Inicio', ruta: url() }, { nombre: 'Rutas y experiencias', ruta }]),
+]
+---
+
+<BaseLayout title="Historias, rutas y experiencias — Enoturismo Biobío" description={descripcion} jsonLd={jsonLd}>
+  <ListadoRutas />
+</BaseLayout>

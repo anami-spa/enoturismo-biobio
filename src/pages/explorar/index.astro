@@ -8,7 +8,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro'
 import Header from '../../components/home/Header.astro'
 import Footer from '../../components/home/Footer.astro'
 import TarjetaIniciativa from '../../components/home/TarjetaIniciativa.astro'
-import { iniciativas, categorias, comunas, foto, nombreCategoria, nombreComuna, normalizar } from '../../utils/iniciativas'
+import { iniciativas, categorias, comunas, foto, nombreCategoria, nombreComuna, normalizar, PLURAL_CATEGORIA } from '../../utils/iniciativas'
+import { listado, migas } from '../../utils/schema'
 import { url } from '../../utils/url'
 
 const pines = await Promise.all(
@@ -27,11 +28,18 @@ const pines = await Promise.all(
 )
 
 const comunasConIniciativas = comunas.filter((c) => iniciativas.some((i) => i.comuna === c.slug))
+const categoriasConIniciativas = categorias.filter((c) => iniciativas.some((i) => i.categoria === c.slug))
+const origen = Astro.site!.origin
+const descripcion = 'Explora las iniciativas de enoturismo del Biobío por comuna y categoría, en lista o en mapa: viñas, gastronomía, alojamiento y experiencias.'
+const jsonLd = [
+  listado(origen, 'CollectionPage', 'Explorar — Enoturismo Biobío', descripcion, url('/explorar/'), iniciativas.map((i) => ({ nombre: i.nombre, ruta: url(`/explorar/${i.slug}/`) }))),
+  migas(origen, [{ nombre: 'Inicio', ruta: url() }, { nombre: 'Explorar', ruta: url('/explorar/') }]),
+]
 const chip =
   'inline-flex min-h-11 items-center rounded-full border border-white/40 px-4 text-base tracking-wide text-white hover:bg-white/10 aria-pressed:border-white aria-pressed:bg-burdeos aria-pressed:font-semibold disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent lg:text-lg'
 ---
 
-<BaseLayout title="Explorar — Enoturismo Biobío" description="Explora las iniciativas de enoturismo del Biobío por comuna y categoría, en lista o en mapa: viñas, gastronomía, alojamiento y experiencias.">
+<BaseLayout title="Explorar — Enoturismo Biobío" description={descripcion} jsonLd={jsonLd}>
   <noscript><style>#controles { display: none; }</style></noscript>
   <Header actual="explorar" solido />
 
@@ -122,6 +130,21 @@ const chip =
           <div id="mapa" class="h-[calc(100vh-2rem)] max-h-[760px] min-h-[360px] w-full bg-ciruela-oscuro" role="region" aria-label="Mapa de iniciativas"></div>
         </div>
         <p id="mapa-error" hidden class="mt-6 rounded-2xl bg-ciruela-oscuro p-6 text-center text-lg">No se pudo cargar el mapa. Puedes seguir usando la vista Lista.</p>
+
+        <nav aria-labelledby="titulo-atajos" class="mt-16 grid gap-8 border-t border-white/20 pt-10 md:grid-cols-2">
+          <div>
+            <h2 id="titulo-atajos" class="text-2xl font-bold">Enoturismo por comuna</h2>
+            <ul class="mt-4 flex flex-wrap gap-x-6 gap-y-1 text-lg">
+              {comunasConIniciativas.map((c) => <li><a href={url(`/explorar/comuna/${c.slug}/`)} class="inline-flex min-h-11 items-center underline underline-offset-4 hover:no-underline">{c.nombre}</a></li>)}
+            </ul>
+          </div>
+          <div>
+            <h2 class="text-2xl font-bold">Enoturismo por categoría</h2>
+            <ul class="mt-4 flex flex-wrap gap-x-6 gap-y-1 text-lg">
+              {categoriasConIniciativas.map((c) => <li><a href={url(`/explorar/categoria/${c.slug}/`)} class="inline-flex min-h-11 items-center underline underline-offset-4 hover:no-underline">{PLURAL_CATEGORIA[c.slug]}</a></li>)}
+            </ul>
+          </div>
+        </nav>
       </div>
     </section>
   </main>

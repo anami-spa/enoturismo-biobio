@@ -1,0 +1,33 @@
+---
+import { Image } from 'astro:assets'
+import { foto } from '../../utils/iniciativas'
+import { nombreTema } from '../../utils/articulos'
+import type { Articulo } from '../../utils/articulos'
+import { url } from '../../utils/url'
+
+export interface Props {
+  articulo: Articulo
+  /** Nivel del título: 2 en listados bajo un h1, 3 dentro de una sección con h2. */
+  nivel?: 2 | 3
+  /** Foto visible al cargar: se descarga de inmediato (mejora el LCP). */
+  prioritaria?: boolean
+}
+
+const { articulo: a, nivel = 2, prioritaria = false } = Astro.props
+const Titulo = `h${nivel}` as 'h2' | 'h3'
+---
+
+<li class="relative rounded-[1.6rem] has-[a:focus-visible]:outline has-[a:focus-visible]:outline-[3px] has-[a:focus-visible]:outline-offset-4 has-[a:focus-visible]:outline-amarillo">
+  <article class="group flex h-full flex-col">
+    <Image src={foto(a.imagen)} alt={a.alt} width={640} height={427} widths={[360, 640]} sizes="(min-width: 1024px) 400px, (min-width: 640px) 45vw, 90vw" class="aspect-[3/2] w-full rounded-[1.6rem] object-cover" loading={prioritaria ? 'eager' : 'lazy'} />
+    <Titulo class="mt-5 text-2xl font-bold tracking-[0.06em] md:text-[1.7rem]">
+      <a href={url(`/rutas/${a.slug}/`)} class="outline-none after:absolute after:inset-0 after:content-[''] group-hover:underline group-hover:underline-offset-8">{a.titulo}</a>
+    </Titulo>
+    <p class="mt-1.5 text-base tracking-[0.08em] text-white/85 md:text-lg">{a.tipo} · {nombreTema(a.tema)}</p>
+    <p class="mt-3 line-clamp-2 text-lg font-light leading-snug">{a.extracto}</p>
+    <span aria-hidden="true" class="mt-5 inline-flex min-h-12 items-center justify-center gap-2 self-start rounded-xl border border-white/40 bg-burdeos px-7 text-lg font-light tracking-[0.08em] group-hover:bg-burdeos/80">
+      Leer artículo
+      <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+    </span>
+  </article>
+</li>

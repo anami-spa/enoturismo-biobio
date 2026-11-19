@@ -1,0 +1,104 @@
+---
+/** Sobre el proyecto — "Herencia viva". Textos de la maqueta; preguntas frecuentes y cifras son de ejemplo hasta validar con el mandante. */
+import { Image } from 'astro:assets'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import Header from '../../components/home/Header.astro'
+import Footer from '../../components/home/Footer.astro'
+import logoColor from '../../assets/logo/logo-color.webp'
+import { categorias, foto, totalRegistradas } from '../../utils/iniciativas'
+import { listado, migas, preguntas } from '../../utils/schema'
+import { url } from '../../utils/url'
+
+const origen = Astro.site!.origin
+const ruta = url('/sobre/')
+const descripcion = 'Enoturismo Biobío reúne iniciativas vinculadas al vino y servicios turísticos de la región. Conoce el proyecto Herencia viva: paisajes, vinos y personas que mantienen vivo el territorio.'
+
+const galeria = [
+  { foto: 'uvas-vid', alt: 'Racimos de uva blanca a contraluz entre las hojas de la parra' },
+  { foto: 'gastronomia-mesa', alt: 'Mesa servida con carne, salmón y puré, junto a una botella y una copa de vino' },
+  { foto: 'estacion-campo', alt: 'Antigua estación de ferrocarril entre flores amarillas' },
+  { foto: 'vendimia', alt: 'Mujer con sombrero caminando entre hileras de viñas durante la vendimia' },
+  { foto: 'vina-casa-rozas', alt: 'Camino entre hileras de viñas con cerros al fondo' },
+  { foto: 'barricas', alt: 'Barricas de roble apiladas en una bodega' },
+]
+
+const faqs = [
+  { pregunta: '¿Qué es Enoturismo Biobío?', respuesta: 'Es un catálogo que reúne iniciativas vinculadas al vino y servicios turísticos de la Región del Biobío: viñas, gastronomía, alojamiento, tour operadores y transporte.' },
+  { pregunta: '¿Cómo encuentro una iniciativa?', respuesta: 'En la sección Explorar puedes filtrar por comuna y categoría, buscar por nombre y alternar entre lista y mapa.' },
+  { pregunta: '¿Cómo reservo o consulto a una iniciativa?', respuesta: 'Cada iniciativa gestiona sus propias reservas. En su ficha encontrarás los canales de contacto disponibles, como WhatsApp, teléfono o correo.' },
+  { pregunta: '¿Cómo sumo mi iniciativa al catálogo?', respuesta: 'Escríbenos desde la página de Contacto eligiendo "Quiero sumar mi iniciativa" y el equipo del programa te orientará.' },
+]
+
+const jsonLd = [
+  listado(origen, 'AboutPage', 'Sobre el proyecto — Herencia viva', descripcion, ruta),
+  preguntas(faqs),
+  migas(origen, [{ nombre: 'Inicio', ruta: url() }, { nombre: 'Sobre el proyecto', ruta }]),
+]
+const boton = 'inline-flex min-h-14 items-center gap-3 rounded-xl border border-white/40 px-9 text-xl font-light tracking-[0.08em]'
+---
+
+<BaseLayout title="Sobre el proyecto — Herencia viva — Enoturismo Biobío" description={descripcion} jsonLd={jsonLd}>
+  <Header actual="sobre" solido />
+
+  <main id="contenido-principal" class="bg-ciruela pb-20 pt-8 md:pb-28 md:pt-12">
+    <div class="mx-auto max-w-[1440px] px-5 md:px-10 lg:px-24">
+      <h1 class="text-[2.6rem] font-bold leading-tight md:text-6xl lg:text-[4.2rem]">Herencia viva</h1>
+      <p class="mt-4 max-w-4xl text-xl font-semibold tracking-wide md:text-2xl">Paisajes, vinos y personas que mantienen vivo el territorio</p>
+
+      <div class="mt-10 grid gap-6 lg:grid-cols-[minmax(0,0.45fr)_minmax(0,1fr)] lg:gap-10">
+        <div class="grid place-items-center rounded-[2rem] bg-white p-8 md:p-10">
+          <Image src={logoColor} alt="Logo Enoturismo Biobío, Herencia viva" width={340} class="h-auto w-[220px] md:w-[280px]" loading="eager" fetchpriority="high" />
+        </div>
+        <div class="flex items-center rounded-[2rem] bg-burdeos p-8 md:p-12">
+          <p class="text-xl font-light leading-relaxed tracking-wide md:text-[1.6rem] md:leading-[1.5]">
+            Enoturismo Biobío reúne iniciativas vinculadas al vino y servicios turísticos de la región. El proyecto considera la marca territorial, la colaboración de sus beneficiarios y el desarrollo del catálogo como herramienta de difusión.
+          </p>
+        </div>
+      </div>
+
+      <section aria-labelledby="titulo-cifras" class="mt-14">
+        <h2 id="titulo-cifras" class="sr-only">El catálogo en cifras</h2>
+        <dl class="grid grid-cols-2 gap-4 sm:max-w-xl">
+          <div class="rounded-2xl bg-ciruela-oscuro p-6"><dd class="text-5xl font-bold md:text-6xl">{totalRegistradas}</dd><dt class="mt-1 text-lg tracking-wide">iniciativas registradas</dt></div>
+          <div class="rounded-2xl bg-ciruela-oscuro p-6"><dd class="text-5xl font-bold md:text-6xl">{categorias.length}</dd><dt class="mt-1 text-lg tracking-wide">categorías de servicio</dt></div>
+        </dl>
+      </section>
+
+      <section aria-labelledby="titulo-galeria" class="mt-14">
+        <h2 id="titulo-galeria" class="text-3xl font-bold md:text-4xl">El territorio en imágenes</h2>
+        <ul class="mt-6 grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-5">
+          {galeria.map((g) => (
+            <li><Image src={foto(g.foto)} alt={g.alt} width={480} height={320} widths={[320, 480]} sizes="(min-width: 1024px) 400px, 45vw" class="aspect-[3/2] w-full rounded-[1.4rem] object-cover" loading="lazy" /></li>
+          ))}
+        </ul>
+      </section>
+
+      <section aria-labelledby="titulo-impulsan" class="mt-14 max-w-3xl">
+        <h2 id="titulo-impulsan" class="text-3xl font-bold md:text-4xl">Quiénes impulsan el proyecto</h2>
+        <p class="mt-4 text-xl font-light leading-relaxed">Enoturismo Biobío es el catálogo del PTI Enoturismo del Biobío, con apoyo de CORFO y Copeval.</p>
+      </section>
+
+      <section aria-labelledby="titulo-faq" class="mt-14 max-w-3xl">
+        <h2 id="titulo-faq" class="text-3xl font-bold md:text-4xl">Preguntas frecuentes</h2>
+        <div class="mt-6 space-y-3">
+          {faqs.map((f) => (
+            <details class="group rounded-2xl bg-ciruela-oscuro">
+              <summary class="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 rounded-2xl px-6 py-3 text-xl font-semibold [&::-webkit-details-marker]:hidden">
+                {f.pregunta}
+                <svg viewBox="0 0 24 24" class="h-6 w-6 shrink-0 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+              </summary>
+              <p class="px-6 pb-5 text-lg font-light leading-relaxed">{f.respuesta}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+
+      <div class="mt-14 flex flex-wrap gap-4">
+        <a href={url('/explorar/')} class={`${boton} bg-noche hover:bg-noche/85`}>Explorar el catálogo</a>
+        <a href={url('/contacto/?tipo=sumar-iniciativa')} class={`${boton} bg-burdeos hover:bg-burdeos/80`}>¿Tienes una iniciativa? Contáctanos</a>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>
